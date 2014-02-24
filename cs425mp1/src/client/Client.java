@@ -2,11 +2,11 @@ package client;
 import java.io.*;
 import java.net.*;
 
-public class client {
+public class Client {
 	 Socket client = null;  
      DataOutputStream os = null;
      DataInputStream is = null;
-     public client(String hostName, int port_num)
+     public Client(String hostName, int port_num)
      {
     	 try {
              client = new Socket(hostName, port_num);
