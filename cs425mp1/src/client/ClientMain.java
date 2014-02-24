@@ -2,7 +2,7 @@ package client;
 
 public class ClientMain {
 	
-	public static final int PORT = 6666;
+	public static final int PORT = 12345;
 	
 	public static void main(String[] args)
 	{

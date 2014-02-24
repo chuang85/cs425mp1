@@ -68,7 +68,6 @@ public class ServerMain {
 			for (int j = 0; j < procCount; j++) {
 				try {
 					is[j].read(input);
-					// System.out.println("here\n" + input[0]);
 					message.add(input);
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -76,11 +75,13 @@ public class ServerMain {
 			}
 			while (!message.isEmpty()) {
 				temp = message.poll();
-				System.out.println("temp\n");
-				System.out.println(temp[0]);
+				System.out.println("temp");
+				for(int j =0 ; j < 3; j ++)
+	    	 		System.out.print(temp[j]+"\n");
 
 				try {
-					os[temp[0]].write(1);
+					os[(int)temp[0]].write(temp,0,3);
+					System.out.println("writing");
 				} catch (IOException e) {
 					e.printStackTrace();
 				}

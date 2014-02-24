@@ -26,7 +26,7 @@ public class Client {
     	 byte[] temp = new byte[3];
     	 temp[0] = 0;
     	 for(int i = 1; i < 3; i++)
-    		 temp[i] =1;
+    		 temp[i] =(byte) i;
     	 try
     	 {
     		 os.write(temp);
@@ -34,19 +34,21 @@ public class Client {
     	 catch (IOException e) {
 	           System.out.println(e);
 	     } 
-    	 
+
+ 	 	
     	 	byte[] temp2 = new byte[3];
     	 while(true)
     	 {
     	 	try
-       	 {
-       		 is.read(temp2);
-       	 }
-       	 catch (IOException e) {
-   	           System.out.println(e);
-   	     } 
-    	 
-    	 System.out.println(temp2);
+    	 	{
+    	 		is.read(temp2);
+    	 	}
+    	 	catch (IOException e) {
+    	 		System.out.println(e);
+    	 	} 
+    		System.out.println("printing out temp \n");
+    		for(int i =0 ; i < 3; i ++)
+    	 		System.out.print(temp[i]+"\n");
     	 }
      }
 }
