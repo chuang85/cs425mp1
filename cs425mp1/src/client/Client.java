@@ -1,7 +1,7 @@
 package client;
 import java.io.*;
 import java.net.*;
-
+ 
 public class Client {
 	 Socket client = null;  
      DataOutputStream os = null;
