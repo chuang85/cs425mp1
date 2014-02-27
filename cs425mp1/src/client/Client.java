@@ -23,10 +23,13 @@ public class Client {
      public void connect()
      {
     	 System.out.println("client getting connection\n");
+    	 
     	 byte[] temp = new byte[3];
     	 temp[0] = 0;
     	 for(int i = 1; i < 3; i++)
     		 temp[i] =(byte) i;
+    	 
+    	 
     	 try
     	 {
     		 os.write(temp);
