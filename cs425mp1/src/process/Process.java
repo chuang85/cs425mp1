@@ -9,6 +9,7 @@ public class Process implements Runnable{
 	int money;
 	int logicalTimestamp;
 	int[] vectorTimestamp;
+	boolean hasRecordedState;
 	
 	public Process(int id, int widget, int money, int totalProcNum) {
 		this.id = id;
@@ -16,6 +17,22 @@ public class Process implements Runnable{
 		this.money = money;
 		logicalTimestamp = 0;
 		vectorTimestamp = new int[totalProcNum];
+		hasRecordedState = false;
+	}
+	
+	public void recordProcessState() {
+		printCurrState(); //TODO Modify this, should write state info into file.
+	}
+	
+	public void onReceivingMarker(Message m, Channel c) {
+		if (m.isMarker()) {
+			if (!hasRecordedState) {
+				recordProcessState();
+				c.recordChannelState();
+			}
+		} else {
+			System.out.println("Not a marker");
+		}
 	}
 	
 	public void updateStateOnReceiving(Message m) {
@@ -34,7 +51,6 @@ public class Process implements Runnable{
 	
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
 		printCurrState();
 	}
 	

@@ -28,4 +28,17 @@ public class Channel {
 	public void turnOffChannel() {
 		isOn = false;
 	}
+	
+	public void recordChannelStateAsEmpty() {
+		
+	}
+	
+	public void recordChannelState() {
+		printCurrState(); // TODO Modify this, should write state info into file, and widget & money should be recorded as well.
+	}
+	
+	public void printCurrState() {
+		System.out.println(String.format("id=%d, isOn=", id, isOn));
+	}
+
 }
