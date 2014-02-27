@@ -40,5 +40,4 @@ public class Channel {
 	public void printCurrState() {
 		System.out.println(String.format("id=%d, isOn=", id, isOn));
 	}
-
 }
