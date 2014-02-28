@@ -1,17 +1,34 @@
 package client;
 import java.io.*;
+
+import message.Marker;
+import message.Message;
+import message.RegularMessage;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
+import java.io.BufferedReader;
 import java.net.*;
 
 public class Client {
 	 Socket client = null;  
-     DataOutputStream os = null;
-     DataInputStream is = null;
+     ObjectOutputStream os = null;
+     ObjectInputStream is = null;
      public Client(String hostName, int port_num)
      {
     	 try {
              client = new Socket(hostName, port_num);
-             os = new DataOutputStream(client.getOutputStream());
-             is = new DataInputStream(client.getInputStream());
+             os = new ObjectOutputStream(client.getOutputStream());
+             is = new ObjectInputStream(client.getInputStream());
          } catch (UnknownHostException e) {
              System.err.println("Don't know about host: hostname");
          } catch (IOException e) {
@@ -20,9 +37,28 @@ public class Client {
     	 
      }
      
+     public int getID() throws ClassNotFoundException
+     {
+    	 System.out.println("client getting connection, getting process id \n");
+    	 int id = 0;
+    	 while(id == 0)
+    	 {
+    		 try
+    		 {
+    			 id =  (Integer) is.readObject();
+
+    		 }
+    		 catch (IOException e) {
+    			 System.out.println(e);
+    		 }
+    	 }
+    	 System.out.println("This is the process's ID" + id);
+    	 return id;
+     }
+     
      public void connect()
      {
-    	 System.out.println("client getting connection\n");
+    	 
     	 
     	 byte[] temp = new byte[3];
     	 temp[0] = 0;
@@ -54,4 +90,5 @@ public class Client {
     	 		System.out.print(temp[i]+"\n");
     	 }
      }
+
 }

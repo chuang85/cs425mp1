@@ -61,7 +61,12 @@ public class Server implements Runnable{
 				is[i] = new ObjectInputStream(clientSocket[i].getInputStream());
 				os[i] = new ObjectOutputStream(clientSocket[i].getOutputStream());
 				//send the process id to the connecting process
-				os[i].write(i);
+				try {
+					os[i].writeObject((Integer) i);
+//					System.out.println(i);
+				} catch (IOException e) {
+					System.out.println(e);
+				}
 				i++;
 
 			} catch (IOException e) {
@@ -69,6 +74,11 @@ public class Server implements Runnable{
 			}
 			if (i == procCount+1)
 				break;
+		}
+		try {
+			  Thread.sleep(1000);
+		} catch (InterruptedException ie) {
+			    //Handle exception
 		}
 		System.out.println("Connection completed \n");
 		

@@ -1,5 +1,8 @@
 package process;
 
+import java.util.Scanner;
+
+import client.Client;
 import message.Message;
 
 public class Process implements Runnable{
@@ -10,9 +13,11 @@ public class Process implements Runnable{
 	int logicalTimestamp;
 	int[] vectorTimestamp;
 	boolean hasRecordedState;
+	Client client;
+	int port_num;
 	
-	public Process(int id, int widget, int money, int totalProcNum) {
-		this.id = id;
+	public Process(int widget, int money, int totalProcNum) {
+//		this.id = id;
 		this.widget = widget;
 		this.money = money;
 		logicalTimestamp = 0;
@@ -51,17 +56,31 @@ public class Process implements Runnable{
 	
 	@Override
 	public void run() {
-		printCurrState();
+		try {
+			  Thread.sleep(1000);
+		} catch (InterruptedException ie) {
+			    //Handle exception
+		}
+		System.out.println("Enter the port number : ");
+		Scanner scanner = new Scanner(System.in);
+		port_num = scanner.nextInt();
+		//use this client to communicate with server
+		client = new Client("localhost", port_num);
+		try {
+			id = client.getID();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println("This is ID " + id);
+//		printCurrState();
 	}
-	
-	/*public static void main(String args[]) {
+	/*
+	public static void main(String args[]) {
 		Process p1 = new Process(1, 12, 13, 5);
 		Process p2 = new Process(2, 22, 23, 5);
 		Process p3 = new Process(3, 33, 34, 5);
-		
-		new Thread(p1).start();
-		new Thread(p2).start();
-		new Thread(p3).start();
-	}*/
-	
+
+	}
+	*/
 }

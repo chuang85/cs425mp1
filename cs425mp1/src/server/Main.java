@@ -10,13 +10,14 @@ import java.util.Queue;
 import java.util.Scanner;
 import java.io.BufferedReader;
 
+import process.Process;
 
 public class Main {
 	
 	public static void main(String args[])
 	{
 		Server server = new Server();
-		
+		int proc_num = 0;
 		//input the port number
 		System.out.println("Enter the port number : ");
 		Scanner scanner = new Scanner(System.in);
@@ -24,7 +25,27 @@ public class Main {
 		
 		//input for the number of processes need
 		System.out.println("Enter the process number : ");
-		server.procCount = scanner.nextInt();
+		proc_num = scanner.nextInt();
+		server.procCount = proc_num;
+		
+		//the process array,    starting from index 1       !!!!!!!!!!!!!!!!!!!!!!
+		Process[] p = new Process[proc_num+1]; 
+		for(int i = 1; i < proc_num+1; i++)
+		{
+			p[i] = new Process(12, 13, proc_num);
+		}
+		new Thread(server).start();
+		
+		for(int i = 1; i < proc_num+1; i++)
+		{
+			new Thread(p[i]).start();
+			try {
+				  Thread.sleep(5000);
+			} catch (InterruptedException ie) {
+				    //Handle exception
+			}
+		}
+		
 		
 		
 	}
