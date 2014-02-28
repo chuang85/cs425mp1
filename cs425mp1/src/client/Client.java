@@ -56,6 +56,35 @@ public class Client {
     	 return id;
      }
      
+     public void sendMessage(int from, int to)
+     {
+    	 	RegularMessage test_m = new RegularMessage(10,10);
+    	 	test_m.to = to;
+    	 	test_m.from = from;
+    	 	try {
+				os.writeObject((RegularMessage)test_m);
+//				System.out.println(i);
+			} catch (IOException e) {
+				System.out.println(e);
+			}
+     }
+     
+     public void listen()  throws ClassNotFoundException
+     {
+    	 RegularMessage my_m;
+    	 while(true)
+    	 {
+    		 try
+    		 {
+    			 my_m =   (RegularMessage) is.readObject();
+    			 System.out.println(my_m.from + my_m.to);
+    		 }
+    		 catch (IOException e) {
+    			 System.out.println(e);
+    		 }
+    	 }
+     }
+     /*
      public void connect()
      {
     	 
@@ -90,5 +119,5 @@ public class Client {
     	 		System.out.print(temp[i]+"\n");
     	 }
      }
-
+	*/
 }

@@ -18,6 +18,7 @@ public class Main {
 	{
 		Server server = new Server();
 		int proc_num = 0;
+		int snapshot_num = 0;
 		//input the port number
 		System.out.println("Enter the port number : ");
 		Scanner scanner = new Scanner(System.in);
@@ -28,11 +29,19 @@ public class Main {
 		proc_num = scanner.nextInt();
 		server.procCount = proc_num;
 		
+		
+		//input number of snapshots
+		System.out.println("Enter the snapshot number : ");
+		snapshot_num = scanner.nextInt();
+		server.snapshot_num = snapshot_num;
+		
+		
 		//the process array,    starting from index 1       !!!!!!!!!!!!!!!!!!!!!!
 		Process[] p = new Process[proc_num+1]; 
 		for(int i = 1; i < proc_num+1; i++)
 		{
-			p[i] = new Process(12, 13, proc_num);
+			//give each process 100 money and 100 wigets to start
+			p[i] = new Process(100, 100, proc_num);
 		}
 		new Thread(server).start();
 		

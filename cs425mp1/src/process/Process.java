@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 import client.Client;
 import message.Message;
+import message.RegularMessage;
 
 public class Process implements Runnable{
 	
@@ -15,6 +16,7 @@ public class Process implements Runnable{
 	boolean hasRecordedState;
 	Client client;
 	int port_num;
+	int snapshot_num;
 	
 	public Process(int widget, int money, int totalProcNum) {
 //		this.id = id;
@@ -54,6 +56,9 @@ public class Process implements Runnable{
 		System.out.println(String.format("id=%d, widget=%d, money=%d, logical=%d", id, widget, money, logicalTimestamp));
 	}
 	
+	
+	
+	
 	@Override
 	public void run() {
 		try {
@@ -73,14 +78,26 @@ public class Process implements Runnable{
 			e.printStackTrace();
 		}
 		System.out.println("This is ID " + id);
-//		printCurrState();
+		
+		//get the snapshot number
+		if(id == 1)
+		{
+			try {
+				snapshot_num = client.getID();
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			System.out.println("Number of snapshot: " + snapshot_num);
+		}
+		
+		client.sendMessage(id, 2);
+		try {
+			client.listen();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
-	/*
-	public static void main(String args[]) {
-		Process p1 = new Process(1, 12, 13, 5);
-		Process p2 = new Process(2, 22, 23, 5);
-		Process p3 = new Process(3, 33, 34, 5);
 
-	}
-	*/
 }

@@ -29,6 +29,7 @@ public class Server implements Runnable{
 
 	int procCount;
 	int portNum;
+	int snapshot_num;
 	
 	public Server()
 	{
@@ -75,6 +76,14 @@ public class Server implements Runnable{
 			if (i == procCount+1)
 				break;
 		}
+		
+		//send the snapshot number to process 1
+		try {
+			os[1].writeObject((Integer) snapshot_num);
+		} catch (IOException e) {
+			System.out.println(e);
+		}
+		
 		try {
 			  Thread.sleep(1000);
 		} catch (InterruptedException ie) {
@@ -84,25 +93,30 @@ public class Server implements Runnable{
 		
 		//listen on clients
 		Message agent;
-		/*
+		
 		while (true) {
-			for (int j = 0; j < procCount; j++) {
-				try {
-					agent = (Message)is[j].readObject();
-					if(agent.isRegular())
-						message_queue.add(agent);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+			//enqueue all the messages and markers, and put marker into channel
+			for (int j = 1; j < procCount+1; j++) {
+					try {
+						agent = (RegularMessage)is[j].readObject();
+						message_queue.add((RegularMessage) agent);
+						if(agent.isRegular())
+						{
+							
+						}
+					} catch (ClassNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				
 			}
-			while (!message.isEmpty()) {
-				temp = message.poll();
-				System.out.println("temp");
-				for(int j =0 ; j < 3; j ++)
-	    	 		System.out.print(temp[j]+"\n");
-
+			while (!message_queue.isEmpty()) {
+				agent = message_queue.poll();
 				try {
-					os[(int)temp[0]].write(temp,0,3);
+					os[(int)agent.to].writeObject((RegularMessage)agent);
 					System.out.println("writing");
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -110,7 +124,7 @@ public class Server implements Runnable{
 
 			}
 		}
-		*/
+		
 	}
 
 }

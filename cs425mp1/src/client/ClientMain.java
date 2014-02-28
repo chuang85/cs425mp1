@@ -7,7 +7,7 @@ public class ClientMain {
 	public static void main(String[] args)
 	{
 		Client my_client = new Client("localhost", PORT);
-		my_client.connect();
+//		my_client.connect();
 		
 	}
 }

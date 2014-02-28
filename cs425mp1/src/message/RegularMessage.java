@@ -5,7 +5,12 @@ public class RegularMessage extends Message {
 	int widget;
 
 	int money;	
-
+	
+	int logicalTimestamp;
+	int[] vectorTimestamp;
+	
+	
+	
 	public RegularMessage(int widget, int money) {
 		this.widget = widget;
 		this.money = money;
