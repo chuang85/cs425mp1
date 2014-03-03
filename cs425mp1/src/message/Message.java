@@ -3,6 +3,10 @@ package message;
 import java.io.Serializable;
 
 public abstract class Message implements Serializable{
+	/**
+	 * Auto-generated serial number.
+	 */
+	private static final long serialVersionUID = -6851812906831068726L;
 	public int from;
 	public int to;
 	
