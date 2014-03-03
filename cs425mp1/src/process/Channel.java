@@ -7,26 +7,33 @@ import message.Message;
 
 public class Channel {
 
+	int from, to;
 	int id;
 	Queue<Message> messageQueue;
-	boolean isOn;
+	boolean recordOn;
 	
 	public Channel(int from, int to) {
+		this.from = from;
+		this.to = to;
 		id = 10*from + to;
 		messageQueue = new LinkedList<Message>();
-		isOn = false;
+		recordOn = false;
 	}
 	
-	public void pushMessage(Message m) {
-		messageQueue.add(m);
+	public void addMessage(Message m) {
+		messageQueue.offer(m);
 	}
 	
-	public void turnOnChannel() {
-		isOn = true;
+	public void removeMessage() {
+		messageQueue.poll();
 	}
 	
-	public void turnOffChannel() {
-		isOn = false;
+	public void turnOnRecord() {
+		recordOn = true;
+	}
+	
+	public void turnOffRecord() {
+		recordOn = false;
 	}
 	
 	public void recordChannelStateAsEmpty() {
@@ -38,6 +45,6 @@ public class Channel {
 	}
 	
 	public void printCurrState() {
-		System.out.println(String.format("id=%d, isOn=", id, isOn));
+		System.out.println(String.format("id=%d, isOn=", id, recordOn));
 	}
 }

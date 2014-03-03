@@ -1,21 +1,14 @@
 package server;
 
-import message.Marker;
-import message.Message;
-import message.RegularMessage;
-
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Scanner;
-import java.io.BufferedReader;
+import java.util.concurrent.ConcurrentLinkedQueue;
+
+import message.Message;
+import message.RegularMessage;
 
 
 public class Server implements Runnable{
@@ -25,7 +18,7 @@ public class Server implements Runnable{
 	ObjectInputStream[] is;
 	ObjectOutputStream[] os;
 //	Message input;
-	Queue<Message> message_queue;
+	ConcurrentLinkedQueue<Message> message_queue; // ConcurrentLinkedQueue is thread safe
 
 	int procCount;
 	int portNum;
@@ -34,7 +27,7 @@ public class Server implements Runnable{
 	public Server()
 	{
 //		input = new byte[3];
-		message_queue = new LinkedList<Message>();
+		message_queue = new ConcurrentLinkedQueue<Message>();
 		
 	}
 	
