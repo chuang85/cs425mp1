@@ -44,7 +44,8 @@ public class Server implements Runnable {
 			try {
 				clientSocket[i] = myServer.accept();
 				is[i] = new ObjectInputStream(clientSocket[i].getInputStream());
-				os[i] = new ObjectOutputStream(clientSocket[i].getOutputStream());
+				os[i] = new ObjectOutputStream(
+						clientSocket[i].getOutputStream());
 				// send the process id to the connecting process
 				os[i].writeObject((Integer) i);
 				// System.out.println(i);
@@ -72,12 +73,12 @@ public class Server implements Runnable {
 
 		// listen on clients
 		Message agent;
-
 		while (true) {
 			// enqueue all the messages and markers, and put marker into channel
 			for (int j = 1; j < proc_num + 1; j++) {
 				try {
 					agent = (RegularMessage) is[j].readObject();
+					System.out.println("agentto=" + agent.to);
 					message_queue.add((RegularMessage) agent);
 					if (agent.isRegular()) {
 
@@ -93,6 +94,7 @@ public class Server implements Runnable {
 			}
 			while (!message_queue.isEmpty()) {
 				agent = message_queue.poll();
+				//System.out.println("agentto=" + agent.to);
 				try {
 					os[(int) agent.to].writeObject((RegularMessage) agent);
 					System.out.println("writing");

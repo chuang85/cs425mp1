@@ -9,16 +9,14 @@ public class RegularMessage extends Message {
 
 	int widget;
 	int money;
-	int from, to;
 	
 	int logicalTimestamp;
 	int[] vectorTimestamp;
 
 	public RegularMessage(int widget, int money, int from, int to) {
+		super(from, to);
 		this.widget = widget;
 		this.money = money;
-		this.from = from;
-		this.to = to;
 	}
 
 	public int getWidget() {
