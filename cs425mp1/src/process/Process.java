@@ -1,8 +1,10 @@
 package process;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 import message.Message;
+import message.RegularMessage;
 import client.Client;
 
 public class Process implements Runnable {
@@ -58,6 +60,16 @@ public class Process implements Runnable {
 				logicalTimestamp));
 	}
 
+	public void sendMessage(int widget, int money, int from, int to) {
+		RegularMessage test_m = new RegularMessage(widget, money, from, to);
+		try {
+			client.os.writeObject((RegularMessage) test_m);
+			// System.out.println(i);
+		} catch (IOException e) {
+			System.out.println(e);
+		}
+	}
+	
 	@Override
 	public void run() {
 		try {
@@ -87,7 +99,7 @@ public class Process implements Runnable {
 			System.out.println("Number of snapshot: " + snapshot_num);
 		}
 
-		client.sendMessage(10, 10, id, 2); // TODO Modify parameters as
+		sendMessage(10, 10, id, 2); // TODO Modify parameters as
 											// variables
 		try {
 			client.listen();

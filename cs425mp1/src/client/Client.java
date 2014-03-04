@@ -10,8 +10,8 @@ import message.RegularMessage;
 
 public class Client {
 	Socket client = null;
-	ObjectOutputStream os = null;
-	ObjectInputStream is = null;
+	public ObjectOutputStream os = null;
+	public ObjectInputStream is = null;
 
 	public Client(String hostName, int port_num) {
 		try {
@@ -19,7 +19,7 @@ public class Client {
 			os = new ObjectOutputStream(client.getOutputStream());
 			is = new ObjectInputStream(client.getInputStream());
 		} catch (UnknownHostException e) {
-			System.err.println("Don't know about host: hostname");
+			System.err.println("Don't know about host:" + hostName);
 		} catch (IOException e) {
 			System.err
 					.println("Couldn't get I/O for the connection to: hostname");
@@ -40,16 +40,6 @@ public class Client {
 		}
 		System.out.println("This is the process's ID " + id);
 		return id;
-	}
-
-	public void sendMessage(int widget, int money, int from, int to) {
-		RegularMessage test_m = new RegularMessage(widget, money, from, to);
-		try {
-			os.writeObject((RegularMessage) test_m);
-			// System.out.println(i);
-		} catch (IOException e) {
-			System.out.println(e);
-		}
 	}
 
 	public void listen() throws ClassNotFoundException {
