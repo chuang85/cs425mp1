@@ -70,6 +70,18 @@ public class Process implements Runnable {
 		}
 	}
 	
+	public void receiveMessage() throws ClassNotFoundException {
+		RegularMessage my_m;
+		while (true) {
+			try {
+				my_m = (RegularMessage) client.is.readObject();
+				System.out.println(String.format("from=%d, to=%d", my_m.getFrom(), my_m.getTo()));
+			} catch (IOException e) {
+				System.out.println(e);
+			}
+		}
+	}
+	
 	@Override
 	public void run() {
 		try {
@@ -102,7 +114,7 @@ public class Process implements Runnable {
 		sendMessage(10, 10, id, 2); // TODO Modify parameters as
 											// variables
 		try {
-			client.listen();
+			receiveMessage();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}

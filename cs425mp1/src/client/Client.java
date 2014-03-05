@@ -42,17 +42,7 @@ public class Client {
 		return id;
 	}
 
-	public void listen() throws ClassNotFoundException {
-		RegularMessage my_m;
-		while (true) {
-			try {
-				my_m = (RegularMessage) is.readObject();
-				System.out.println(my_m.getFrom() + my_m.getTo());
-			} catch (IOException e) {
-				System.out.println(e);
-			}
-		}
-	}
+	
 
 	/*public void connect() {
 
