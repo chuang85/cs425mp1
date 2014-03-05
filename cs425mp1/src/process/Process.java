@@ -108,7 +108,7 @@ public class Process implements Runnable {
 			System.out.println("Number of snapshot: " + Main.snapshot_num);
 		}
 
-		proc_send send = new proc_send(client.os,id, Main.proc_num);
+		ProcessSendThread send = new ProcessSendThread(client.os,id, Main.proc_num);
 		new Thread(send).start();
 		try {
 			receiveMessage();

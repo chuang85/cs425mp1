@@ -7,11 +7,11 @@ import java.util.Random;
 import message.Marker;
 import message.RegularMessage;
 
-public class proc_send implements Runnable{
+public class ProcessSendThread implements Runnable{
 	ObjectOutputStream os;
 	int id;
 	int proc_num;
-	public proc_send(ObjectOutputStream os, int id, int proc_num)
+	public ProcessSendThread(ObjectOutputStream os, int id, int proc_num)
 	{
 		this.os = os;
 		this.id = id;
