@@ -2,42 +2,52 @@ package utility;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 public class SearchTool {
-	BufferedReader br;
-	
-	public void loadFile(String filePath) throws FileNotFoundException {
-		br = new BufferedReader(new FileReader(filePath));
+	final File folder;
+	Set<String> fileSet;
+	static final String txtDirectory = System.getProperty("user.dir") + "/snapshot_result/";
+
+	public SearchTool(String folderPath) {
+		folder = new File(folderPath);
+		fileSet = new HashSet<String>();
 	}
-	
-	public void searchAll(int n) throws IOException {
-		String query = "snapshot " + String.valueOf(n);
-		String currLine;
-		while ((currLine = br.readLine()) != null) {
-			if (currLine.contains(query))
-				System.out.println(currLine);
+
+	public void listFilesForFolder() {
+		for (final File fileEntry : folder.listFiles()) {
+			if (fileEntry.isDirectory()) {
+				listFilesForFolder();
+			} else {
+				//System.out.println(fileEntry.getName());
+				fileSet.add(fileEntry.getName());
+			}
 		}
 	}
-	
-	public static void listFilesForFolder(final File folder) {
-	    for (final File fileEntry : folder.listFiles()) {
-	        if (fileEntry.isDirectory()) {
-	            listFilesForFolder(fileEntry);
-	        } else {
-	            System.out.println(fileEntry.getName());
-	        }
-	    }
+
+	public void searchAll(int n) throws IOException {
+		String query = "snapshot " + String.valueOf(n);
+		String fullPath;
+		String currLine;
+		BufferedReader br = null;
+		for (String currFile : fileSet) {
+			fullPath = txtDirectory + currFile;
+			//System.out.println(fullPath);
+			br = new BufferedReader(new FileReader(fullPath));
+			while ((currLine = br.readLine()) != null) {
+				if (currLine.contains(query))
+					System.out.println(currLine);
+			}
+		}
+		br.close();
 	}
-	
+
 	public static void main(String[] args) throws IOException {
-		
-		/*SearchTool st = new SearchTool();
-		st.loadFile("test.txt");
-		st.searchAll(2);*/
-		final File folder = new File(System.getProperty("user.dir") + "/snapshot_result");
-		listFilesForFolder(folder);
+		SearchTool st = new SearchTool(txtDirectory);
+		st.listFilesForFolder();
+		st.searchAll(1);
 	}
 }
