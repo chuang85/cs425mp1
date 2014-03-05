@@ -115,6 +115,8 @@ public class Process implements Runnable {
 			System.out.println("Number of snapshot: " + snapshot_num);
 		}
 
+		proc_send send = new proc_send(client.os,id, proc_num);
+		new Thread(send).start();
 	/*	Random rand = new Random(50);
 		int rand_num;
 
@@ -131,13 +133,15 @@ public class Process implements Runnable {
 			}
 			// System.out.println("sending loop");
 		}*/
-		sendMessage(10, 10, id, 2);
+		
+//		sendMessage(10, 10, id, 2);
 		try {
 			receiveMessage();
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 	}
 
 }
