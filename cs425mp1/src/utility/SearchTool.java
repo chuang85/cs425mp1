@@ -17,17 +17,6 @@ public class SearchTool {
 		fileSet = new HashSet<String>();
 	}
 
-	public void listFilesForFolder() {
-		for (final File fileEntry : folder.listFiles()) {
-			if (fileEntry.isDirectory()) {
-				listFilesForFolder();
-			} else {
-				//System.out.println(fileEntry.getName());
-				fileSet.add(fileEntry.getName());
-			}
-		}
-	}
-
 	public void searchAll(int n) throws IOException {
 		String query = "snapshot " + String.valueOf(n);
 		String fullPath;
@@ -45,6 +34,17 @@ public class SearchTool {
 		br.close();
 	}
 
+	private void listFilesForFolder() {
+		for (final File fileEntry : folder.listFiles()) {
+			if (fileEntry.isDirectory()) {
+				listFilesForFolder();
+			} else {
+				//System.out.println(fileEntry.getName());
+				fileSet.add(fileEntry.getName());
+			}
+		}
+	}
+	
 	public static void main(String[] args) throws IOException {
 		SearchTool st = new SearchTool(txtDirectory);
 		st.listFilesForFolder();
