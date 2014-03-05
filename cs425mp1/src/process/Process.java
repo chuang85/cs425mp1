@@ -11,12 +11,12 @@ import client.Client;
 
 public class Process implements Runnable {
 
-	int id;
-	int widget;
-	int money;
-	int logicalTimestamp;
-	int[] vectorTimestamp;
-	boolean hasRecordedState;
+	public int id;
+	public int widget;
+	public int money;
+	public int logicalTimestamp;
+	public int[] vectorTimestamp;
+	public boolean hasRecordedState;
 	Client client;
 
 	public Process(int widget, int money) {
@@ -58,7 +58,7 @@ public class Process implements Runnable {
 				"id=%d, widget=%d, money=%d, logical=%d", id, widget, money,
 				logicalTimestamp));
 	}
-
+/*
 	public void sendMessage(int widget, int money, int from, int to) {
 		RegularMessage test_m = new RegularMessage(widget, money, from, to);
 		test_m.testStr = "Greetings from process " + id;
@@ -70,13 +70,16 @@ public class Process implements Runnable {
 			System.out.println(e);
 		}
 	}
-
+*/
 	public void receiveMessage() throws ClassNotFoundException {
 		RegularMessage my_m;
 		while (true) {
 			try {
 				my_m = (RegularMessage) client.is.readObject();
 				System.out.println(String.format("Process %d said: Receive msg from %d, content: %s", id, my_m.getFrom(), my_m.testStr));
+//				System.out.println("money " + my_m.money);
+				money += my_m.money;
+				widget += my_m.widget;
 			} catch (IOException e) {
 				System.out.println(e);
 			}

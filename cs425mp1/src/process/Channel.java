@@ -9,7 +9,7 @@ public class Channel {
 
 	int from, to;
 	int id;
-	Queue<Message> messageQueue;
+	public Queue<Message> messageQueue;
 	boolean recordOn;
 	
 	public Channel(int from, int to) {
@@ -42,6 +42,11 @@ public class Channel {
 	
 	public void recordChannelState() {
 		printCurrState(); // TODO Modify this, should write state info into file, and widget & money should be recorded as well.
+	}
+	
+	public boolean outputCurrState()
+	{
+		return recordOn;
 	}
 	
 	public void printCurrState() {

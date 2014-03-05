@@ -7,8 +7,8 @@ public class RegularMessage extends Message {
 	 */
 	private static final long serialVersionUID = 1536048653421673109L;
 
-	int widget;
-	int money;
+	public int widget;
+	public int money;
 	public String testStr;
 	int logicalTimestamp;
 	int[] vectorTimestamp;

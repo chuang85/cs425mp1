@@ -10,7 +10,7 @@ public class Main {
 	public static int proc_num = 0;
 	public static int snapshot_num = 0;
 	public static boolean snapshot_on = false;
-	public static int sequence_num;
+	public static int sequence_num = 1;
 	public static Process[] p;
 	public static void main(String args[]) {
 		Server server = new Server();

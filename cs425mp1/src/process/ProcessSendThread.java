@@ -6,6 +6,7 @@ import java.util.Random;
 
 import server.Main;
 import message.Marker;
+import message.Message;
 import message.RegularMessage;
 
 public class ProcessSendThread implements Runnable{
@@ -39,7 +40,7 @@ public class ProcessSendThread implements Runnable{
 			{
 				Marker m = new Marker(sequenceNum, from, i);
 				try {
-					os.writeObject((Marker) m);
+					os.writeObject((Message) m);
 					os.flush();
 				} catch (IOException e) {
 					System.out.println(e);
@@ -55,15 +56,16 @@ public class ProcessSendThread implements Runnable{
 		Random rand = new Random(50);
 		Random ano_rand = new Random(20);
 		int rand_num;
-
+		int wiget_send = 0;
+		int money_send = 0;
+		
 		while (true) {
 			// get a random number between 0-2
 			rand_num = rand.nextInt(proc_num);
-			if ((rand_num + 1) != id) {
-				sendMessage(10 / (id + 1), 5 / (id + 1), id, rand_num + 1);
-			}
 			
+			//for send the marker
 			//process 1 init marker at a random time
+			
 			if((id == 1) && (Main.snapshot_num > 0) && (ano_rand.nextInt(100)<10) && (Main.snapshot_on == false))
 			{
 				Main.snapshot_on = true;
@@ -73,7 +75,15 @@ public class ProcessSendThread implements Runnable{
 			{
 				sendMarker(Main.sequence_num,id);
 			}
-
+			
+			//send the regular message
+			if ((rand_num + 1) != id) {
+				wiget_send = 10 / (id + 1);
+				money_send =  5 / (id + 1);
+				Main.p[id].widget -= wiget_send;
+				Main.p[id].money -= money_send;
+				sendMessage(wiget_send, money_send, id, rand_num + 1);
+			}
 		}
 	}
 
