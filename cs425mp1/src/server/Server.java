@@ -121,7 +121,13 @@ public class Server implements Runnable {
 					//p has not recorded its state yet
 					if(Main.p[agent.to].hasRecordedState == false)
 					{
-						//record it process state now
+						try {
+							Main.p[agent.to].recordProcessState();  // ------------HCK ADDED-----------------
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						// TODO record it process state now
 						Main.p[agent.to].hasRecordedState = true;
 						//turns on recording of messages arrving over other incoming channels
 						for(int j = 1; j < Main.proc_num+1; j++){

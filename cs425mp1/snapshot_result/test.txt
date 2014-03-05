@@ -1,4 +1,0 @@
-id 3 : snapshot 1 : logical 1
-id 3 : snapshot 1 : logical 2
-id 3 : snapshot 2 : logical 3
-id 3 : snapshot 3 : logical 4

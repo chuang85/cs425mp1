@@ -1,12 +1,16 @@
 package process;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Random;
-import java.util.Scanner;
 
-import server.Main;
 import message.Message;
 import message.RegularMessage;
+
+import org.omg.CORBA.Environment;
+
+import server.Main;
 import client.Client;
 
 public class Process implements Runnable {
@@ -27,12 +31,27 @@ public class Process implements Runnable {
 		hasRecordedState = false;
 	}
 
-	public void recordProcessState() {
-		printCurrState(); // TODO Modify this, should write state info into
-							// file.
+	public void recordProcessState() throws IOException {
+		String content = String.format(
+				"id %d : snapshot : %d : money %d widgets %d", id,
+				Main.sequence_num, money, widget); // TODO ADD TIMESTAMP
+
+		String filePath = Main.txtDirectory + "process_" + id + ".txt";
+		File file = new File(filePath);
+
+		// if file doesnt exists, then create it
+		if (!file.exists()) {
+			file.createNewFile();
+		}
+		// true means append to existing file
+		FileWriter fw = new FileWriter(file.getAbsoluteFile(), true);
+		BufferedWriter bw = new BufferedWriter(fw);
+		bw.write(content);
+		bw.newLine();
+		bw.close();
 	}
 
-	public void onReceivingMarker(Message m, Channel c) {
+	public void onReceivingMarker(Message m, Channel c) throws IOException {
 		if (m.isMarker()) {
 			if (!hasRecordedState) {
 				recordProcessState();
@@ -58,26 +77,16 @@ public class Process implements Runnable {
 				"id=%d, widget=%d, money=%d, logical=%d", id, widget, money,
 				logicalTimestamp));
 	}
-/*
-	public void sendMessage(int widget, int money, int from, int to) {
-		RegularMessage test_m = new RegularMessage(widget, money, from, to);
-		test_m.testStr = "Greetings from process " + id;
-		try {
-			client.os.writeObject((RegularMessage) test_m);
-			client.os.flush();
-			// System.out.println(i);
-		} catch (IOException e) {
-			System.out.println(e);
-		}
-	}
-*/
+
 	public void receiveMessage() throws ClassNotFoundException {
 		RegularMessage my_m;
 		while (true) {
 			try {
 				my_m = (RegularMessage) client.is.readObject();
-				System.out.println(String.format("Process %d said: Receive msg from %d, content: %s", id, my_m.getFrom(), my_m.testStr));
-//				System.out.println("money " + my_m.money);
+				System.out.println(String.format(
+						"Process %d said: Receive msg from %d, content: %s",
+						id, my_m.getFrom(), my_m.testStr));
+				// System.out.println("money " + my_m.money);
 				money += my_m.money;
 				widget += my_m.widget;
 			} catch (IOException e) {
@@ -112,7 +121,8 @@ public class Process implements Runnable {
 			System.out.println("Number of snapshot: " + Main.snapshot_num);
 		}
 
-		ProcessSendThread send = new ProcessSendThread(client.os,id, Main.proc_num);
+		ProcessSendThread send = new ProcessSendThread(client.os, id,
+				Main.proc_num);
 		new Thread(send).start();
 		try {
 			receiveMessage();
@@ -120,7 +130,7 @@ public class Process implements Runnable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
 
 }

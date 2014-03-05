@@ -1,5 +1,6 @@
 package server;
 
+import java.io.File;
 import java.util.Scanner;
 
 import process.Process;
@@ -12,9 +13,14 @@ public class Main {
 	public static boolean snapshot_on = false;
 	public static int sequence_num = 1;
 	public static Process[] p;
+	public static final String txtDirectory = System.getProperty("user.dir")
+			+ "/snapshot_result/";
+
 	public static void main(String args[]) {
+		clearDirectory();
+
 		Server server = new Server();
-		
+
 		// input the port number
 		System.out.println("Enter the port number : ");
 		Scanner scanner = new Scanner(System.in);
@@ -23,12 +29,12 @@ public class Main {
 		// input for the number of processes need
 		System.out.println("Enter the process number : ");
 		proc_num = scanner.nextInt();
-		//proc_num = proc_num;
+		// proc_num = proc_num;
 
 		// input number of snapshots
 		System.out.println("Enter the snapshot number : ");
 		snapshot_num = scanner.nextInt();
-		//snapshot_num = snapshot_num;
+		// snapshot_num = snapshot_num;
 
 		// the process array, starting from index 1 !!!!!!!!!!!!!!!!!!!!!!
 		p = new Process[proc_num + 1];
@@ -47,5 +53,11 @@ public class Main {
 			}
 		}
 
+	}
+
+	private static void clearDirectory() {
+		File dir = new File(txtDirectory);
+		for (File file : dir.listFiles())
+			file.delete();
 	}
 }
