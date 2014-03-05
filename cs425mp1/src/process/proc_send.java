@@ -1,10 +1,10 @@
 package process;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Random;
 
+import message.Marker;
 import message.RegularMessage;
 
 public class proc_send implements Runnable{
@@ -28,6 +28,11 @@ public class proc_send implements Runnable{
 			System.out.println(e);
 		}
 	}
+	
+	public void sendMarker(int sequenceNum, int from, int to) {
+		Marker m = new Marker(sequenceNum, from, to);
+	}
+	
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Random;
 import java.util.Scanner;
 
+import server.Main;
 import message.Message;
 import message.RegularMessage;
 import client.Client;
@@ -17,18 +18,13 @@ public class Process implements Runnable {
 	int[] vectorTimestamp;
 	boolean hasRecordedState;
 	Client client;
-	int proc_num;
-	int port_num; // TODO Should assign a initial value?
-	int snapshot_num; // TODO Should assign a initial value?
 
-	public Process(int widget, int money, int totalProcNum) {
-		// this.id = id;
+	public Process(int widget, int money) {
 		this.widget = widget;
 		this.money = money;
 		logicalTimestamp = 0;
-		vectorTimestamp = new int[totalProcNum];
+		vectorTimestamp = new int[Main.proc_num];
 		hasRecordedState = false;
-		proc_num = totalProcNum;
 	}
 
 	public void recordProcessState() {
@@ -93,11 +89,8 @@ public class Process implements Runnable {
 		} catch (InterruptedException ie) {
 			// Handle exception
 		}
-		System.out.println("Enter the port number : ");
-		Scanner scanner = new Scanner(System.in);
-		port_num = scanner.nextInt();
 		// use this client to communicate with server
-		client = new Client("localhost", port_num);
+		client = new Client("localhost", Main.port_num);
 		try {
 			id = client.getID();
 		} catch (ClassNotFoundException e) {
@@ -108,33 +101,15 @@ public class Process implements Runnable {
 		// get the snapshot number
 		if (id == 1) {
 			try {
-				snapshot_num = client.getID(); // ???
+				Main.snapshot_num = client.getID(); // ???
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
 			}
-			System.out.println("Number of snapshot: " + snapshot_num);
+			System.out.println("Number of snapshot: " + Main.snapshot_num);
 		}
 
-		proc_send send = new proc_send(client.os,id, proc_num);
+		proc_send send = new proc_send(client.os,id, Main.proc_num);
 		new Thread(send).start();
-	/*	Random rand = new Random(50);
-		int rand_num;
-
-		while (true) {
-			// get a random number between 0-2
-			rand_num = rand.nextInt(proc_num);
-			if ((rand_num + 1) != id) {
-				sendMessage(10 / (id + 1), 5 / (id + 1), id, rand_num + 1);
-			}
-			try {
-				receiveMessage();
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			}
-			// System.out.println("sending loop");
-		}*/
-		
-//		sendMessage(10, 10, id, 2);
 		try {
 			receiveMessage();
 		} catch (ClassNotFoundException e) {
