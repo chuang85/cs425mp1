@@ -1,6 +1,7 @@
 package process;
 
 import java.io.IOException;
+import java.util.Random;
 import java.util.Scanner;
 
 import message.Message;
@@ -16,6 +17,7 @@ public class Process implements Runnable {
 	int[] vectorTimestamp;
 	boolean hasRecordedState;
 	Client client;
+	int proc_num;
 	int port_num; // TODO Should assign a initial value?
 	int snapshot_num; // TODO Should assign a initial value?
 
@@ -26,6 +28,7 @@ public class Process implements Runnable {
 		logicalTimestamp = 0;
 		vectorTimestamp = new int[totalProcNum];
 		hasRecordedState = false;
+		proc_num = totalProcNum;
 	}
 
 	public void recordProcessState() {
@@ -69,19 +72,20 @@ public class Process implements Runnable {
 			System.out.println(e);
 		}
 	}
-	
+
 	public void receiveMessage() throws ClassNotFoundException {
 		RegularMessage my_m;
 		while (true) {
 			try {
 				my_m = (RegularMessage) client.is.readObject();
-				System.out.println(String.format("from=%d, to=%d", my_m.getFrom(), my_m.getTo()));
+				System.out.println(String.format("from=%d, to=%d",
+						my_m.getFrom(), my_m.getTo()));
 			} catch (IOException e) {
 				System.out.println(e);
 			}
 		}
 	}
-	
+
 	@Override
 	public void run() {
 		try {
@@ -111,12 +115,21 @@ public class Process implements Runnable {
 			System.out.println("Number of snapshot: " + snapshot_num);
 		}
 
-		sendMessage(10, 10, id, 2); // TODO Modify parameters as
-											// variables
-		try {
-			receiveMessage();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
+		Random rand = new Random(50);
+		int rand_num;
+
+		while (true) {
+			// get a random number between 0-2
+			rand_num = rand.nextInt(proc_num);
+			if ((rand_num + 1) != id) {
+				sendMessage(10 / (id + 1), 5 / (id + 1), id, rand_num + 1);
+			}
+			try {
+				receiveMessage();
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			}
+			// System.out.println("sending loop");
 		}
 	}
 
