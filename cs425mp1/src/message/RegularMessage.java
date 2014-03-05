@@ -9,7 +9,7 @@ public class RegularMessage extends Message {
 
 	int widget;
 	int money;
-	
+	public String testStr;
 	int logicalTimestamp;
 	int[] vectorTimestamp;
 
@@ -17,6 +17,7 @@ public class RegularMessage extends Message {
 		super(from, to);
 		this.widget = widget;
 		this.money = money;
+		testStr = "";
 	}
 
 	public int getWidget() {

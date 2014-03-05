@@ -65,6 +65,7 @@ public class Process implements Runnable {
 
 	public void sendMessage(int widget, int money, int from, int to) {
 		RegularMessage test_m = new RegularMessage(widget, money, from, to);
+		test_m.testStr = "Greetings from process " + id;
 		try {
 			client.os.writeObject((RegularMessage) test_m);
 			// System.out.println(i);
@@ -78,8 +79,7 @@ public class Process implements Runnable {
 		while (true) {
 			try {
 				my_m = (RegularMessage) client.is.readObject();
-				System.out.println(String.format("from=%d, to=%d",
-						my_m.getFrom(), my_m.getTo()));
+				System.out.println(String.format("Process %d said: Receive msg from %d, content: %s", id, my_m.getFrom(), my_m.testStr));
 			} catch (IOException e) {
 				System.out.println(e);
 			}
@@ -115,7 +115,7 @@ public class Process implements Runnable {
 			System.out.println("Number of snapshot: " + snapshot_num);
 		}
 
-		Random rand = new Random(50);
+	/*	Random rand = new Random(50);
 		int rand_num;
 
 		while (true) {
@@ -130,6 +130,13 @@ public class Process implements Runnable {
 				e.printStackTrace();
 			}
 			// System.out.println("sending loop");
+		}*/
+		sendMessage(10, 10, id, 2);
+		try {
+			receiveMessage();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 

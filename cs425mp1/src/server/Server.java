@@ -78,7 +78,6 @@ public class Server implements Runnable {
 			for (int j = 1; j < proc_num + 1; j++) {
 				try {
 					agent = (RegularMessage) is[j].readObject();
-					System.out.println("agentto=" + agent.to);
 					message_queue.add((RegularMessage) agent);
 					if (agent.isRegular()) {
 
@@ -97,7 +96,7 @@ public class Server implements Runnable {
 				//System.out.println("agentto=" + agent.to);
 				try {
 					os[(int) agent.to].writeObject((RegularMessage) agent);
-					System.out.println("writing");
+					System.out.println(String.format("Sending msg from %d to %d", agent.from, agent.to));
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
