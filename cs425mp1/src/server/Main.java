@@ -9,7 +9,9 @@ public class Main {
 	public static int port_num;
 	public static int proc_num = 0;
 	public static int snapshot_num = 0;
-	
+	public static boolean snapshot_on = false;
+	public static int sequence_num;
+	public static Process[] p;
 	public static void main(String args[]) {
 		Server server = new Server();
 		
@@ -29,7 +31,7 @@ public class Main {
 		//snapshot_num = snapshot_num;
 
 		// the process array, starting from index 1 !!!!!!!!!!!!!!!!!!!!!!
-		Process[] p = new Process[proc_num + 1];
+		p = new Process[proc_num + 1];
 		for (int i = 1; i < proc_num + 1; i++) {
 			// give each process 100 money and 100 wigets to start
 			p[i] = new Process(100, 100);

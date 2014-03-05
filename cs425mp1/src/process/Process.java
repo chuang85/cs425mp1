@@ -64,6 +64,7 @@ public class Process implements Runnable {
 		test_m.testStr = "Greetings from process " + id;
 		try {
 			client.os.writeObject((RegularMessage) test_m);
+			client.os.flush();
 			// System.out.println(i);
 		} catch (IOException e) {
 			System.out.println(e);

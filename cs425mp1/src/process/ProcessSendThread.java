@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.Random;
 
+import server.Main;
 import message.Marker;
 import message.RegularMessage;
 
@@ -29,14 +30,30 @@ public class ProcessSendThread implements Runnable{
 		}
 	}
 	
-	public void sendMarker(int sequenceNum, int from, int to) {
-		Marker m = new Marker(sequenceNum, from, to);
+	
+	
+	public void sendMarker(int sequenceNum, int from) {
+		for(int i = 1; i < Main.proc_num+1; i ++)
+		{
+			if(i != from)
+			{
+				Marker m = new Marker(sequenceNum, from, i);
+				try {
+					os.writeObject((Marker) m);
+					os.flush();
+				} catch (IOException e) {
+					System.out.println(e);
+				}
+			}
+		}
+			
 	}
 	
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
-			Random rand = new Random(50);
+		Random rand = new Random(50);
+		Random ano_rand = new Random(20);
 		int rand_num;
 
 		while (true) {
@@ -44,6 +61,17 @@ public class ProcessSendThread implements Runnable{
 			rand_num = rand.nextInt(proc_num);
 			if ((rand_num + 1) != id) {
 				sendMessage(10 / (id + 1), 5 / (id + 1), id, rand_num + 1);
+			}
+			
+			//process 1 init marker at a random time
+			if((id == 1) && (Main.snapshot_num > 0) && (ano_rand.nextInt(100)<10) && (Main.snapshot_on == false))
+			{
+				Main.snapshot_on = true;
+				Main.p[id].hasRecordedState = true;
+				sendMarker(Main.sequence_num, id);
+			}	else if((Main.snapshot_on == true)&& (id!= 1) &&(Main.p[id].hasRecordedState == true))
+			{
+				sendMarker(Main.sequence_num,id);
 			}
 
 		}

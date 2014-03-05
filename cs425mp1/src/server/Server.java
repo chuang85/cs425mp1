@@ -7,6 +7,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import process.Channel;
 import message.Message;
 import message.RegularMessage;
 
@@ -16,7 +17,8 @@ public class Server implements Runnable {
 	Socket[] clientSocket;
 	ObjectInputStream[] is;
 	ObjectOutputStream[] os;
-	// Message input. ConcurrentLinkedQueue is thread safe
+	Channel[][] channel;
+ 	// Message input. ConcurrentLinkedQueue is thread safe
 	ConcurrentLinkedQueue<Message> message_queue = new ConcurrentLinkedQueue<Message>();
 
 	@Override
@@ -44,6 +46,7 @@ public class Server implements Runnable {
 						clientSocket[i].getOutputStream());
 				// send the process id to the connecting process
 				os[i].writeObject((Integer) i);
+				os[i].flush();
 				i++;
 			} catch (IOException e) {
 				System.out.println(e);
@@ -55,6 +58,7 @@ public class Server implements Runnable {
 		// send the snapshot number to process 1
 		try {
 			os[1].writeObject((Integer) Main.snapshot_num);
+			os[i].flush();
 		} catch (IOException e) {
 			System.out.println(e);
 		}
@@ -65,7 +69,9 @@ public class Server implements Runnable {
 			// Handle exception
 		}
 		System.out.println("Connection completed \n");
-
+		
+		channel = new Channel[Main.proc_num][Main.proc_num];
+		
 		// listen on clients
 		Message agent;
 		while (true) {
@@ -90,6 +96,7 @@ public class Server implements Runnable {
 				agent = message_queue.poll();
 				try {
 					os[(int) agent.to].writeObject((RegularMessage) agent);
+					os[(int) agent.to].flush();
 					System.out.println(String.format("Sending msg from %d to %d", agent.from, agent.to));
 				} catch (IOException e) {
 					e.printStackTrace();
