@@ -48,6 +48,7 @@ public class Server implements Runnable {
 						
 					}
 					Main.channel[j][k].turnOffRecord();
+					Main.channel[j][k].hasPrintOff();
 				}
 			}
 		}
@@ -164,40 +165,44 @@ public class Server implements Runnable {
 					}	else
 					{
 						Main.channel[agent.from][agent.to].turnOffRecord();
-						System.out.println("printing channel message");
-						while(Main.channel[agent.from][agent.to].messageQueue.peek() != null)
-						{
-							System.out.println("this is channel" + agent.from+ " " + agent.to);
-							RegularMessage rm = (RegularMessage) Main.channel[agent.from][agent.to].messageQueue
-									.poll();
-							synchronized (this) {
-								String content = String
-										.format("id %d : snapshot %d : message %d to %d : money %d widgets %d",
-												agent.to, Main.sequence_num,
-												agent.from, agent.to, rm.money,
-												rm.widget); // TODO ADD
-															// TIMESTAMP
+//						if(!Main.channel[agent.from][agent.to].hasPrint())
+//						{
+							Main.channel[agent.from][agent.to].hasPrintOn();
+							System.out.println("printing channel message");
+							while(Main.channel[agent.from][agent.to].messageQueue.peek() != null)
+							{
+								System.out.println("this is channel" + agent.from+ " " + agent.to);
+								RegularMessage rm = (RegularMessage) Main.channel[agent.from][agent.to].messageQueue
+										.poll();
+								synchronized (this) {
+									String content = String
+											.format("id %d : snapshot %d : message %d to %d : money %d widgets %d",
+													agent.to, Main.sequence_num,
+													agent.from, agent.to, rm.money,
+													rm.widget); // TODO ADD
+																	// TIMESTAMP
 
-								String filePath = Main.txtDirectory
-										+ "channel_" + agent.from + agent.to
-										+ ".txt";
-								File file = new File(filePath);
-								try {
-									if (!file.exists()) {
-										file.createNewFile();
+									String filePath = Main.txtDirectory
+											+ "channel_" + agent.from + agent.to
+											+ ".txt";
+									File file = new File(filePath);
+									try {
+										if (!file.exists()) {
+											file.createNewFile();
+										}
+										FileWriter fw = new FileWriter(
+												file.getAbsoluteFile(), true);
+										BufferedWriter bw = new BufferedWriter(fw);
+										bw.write(content);
+										bw.newLine();
+										bw.close();
+									} catch (IOException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
 									}
-									FileWriter fw = new FileWriter(
-											file.getAbsoluteFile(), true);
-									BufferedWriter bw = new BufferedWriter(fw);
-									bw.write(content);
-									bw.newLine();
-									bw.close();
-								} catch (IOException e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
 								}
 							}
-						}
+//						}
 						
 						///
 						///

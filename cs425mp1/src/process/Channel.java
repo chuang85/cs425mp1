@@ -11,6 +11,7 @@ public class Channel {
 	int id;
 	public Queue<Message> messageQueue;
 	boolean recordOn;
+	boolean hasPrint;
 	
 	public Channel(int from, int to) {
 		this.from = from;
@@ -18,6 +19,23 @@ public class Channel {
 		id = 10*from + to;
 		messageQueue = new LinkedList<Message>();
 		recordOn = false;
+		hasPrint = false;
+	}
+	
+	public void hasPrintOn()
+	{
+		hasPrint = true;
+	}
+	
+	public void hasPrintOff()
+	{
+		hasPrint = false;
+	}
+	
+	public boolean hasPrint()
+	{
+		boolean temp = hasPrint;
+		return temp;
 	}
 	
 	public void addMessage(Message m) {
@@ -52,4 +70,5 @@ public class Channel {
 	public void printCurrState() {
 		System.out.println(String.format("id=%d, isOn=", id, recordOn));
 	}
+
 }
