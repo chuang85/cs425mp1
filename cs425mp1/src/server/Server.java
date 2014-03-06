@@ -21,7 +21,6 @@ public class Server implements Runnable {
 	Socket[] clientSocket;
 	ObjectInputStream[] is;
 	ObjectOutputStream[] os;
-	Channel[][] channel;
 	int total_marker; 
  	// Message input. ConcurrentLinkedQueue is thread safe
 	ConcurrentLinkedQueue<Message> message_queue = new ConcurrentLinkedQueue<Message>();
@@ -44,11 +43,11 @@ public class Server implements Runnable {
 				if(j != k)
 				{
 					
-					while(channel[j][k].messageQueue.poll() != null)
+					while(Main.channel[j][k].messageQueue.poll() != null)
 					{
 						
 					}
-					channel[j][k].turnOffRecord();
+					Main.channel[j][k].turnOffRecord();
 				}
 			}
 		}
@@ -104,14 +103,14 @@ public class Server implements Runnable {
 		System.out.println("Connection completed \n");
 		
 		//channel  format  channel[from][to]  starting from 1,1 
-		channel = new Channel[Main.proc_num+1][Main.proc_num+1];
+		Main.channel = new Channel[Main.proc_num+1][Main.proc_num+1];
 		for(int j = 1; j < Main.proc_num+1; j ++)
 		{
 			for(int k = 1; k < Main.proc_num+1; k++)
 			{
 				if(j != k)
 				{
-					channel[j][k] = new Channel(j,k);
+					Main.channel[j][k] = new Channel(j,k);
 				}
 			}
 		}
@@ -159,19 +158,17 @@ public class Server implements Runnable {
 						//turns on recording of messages arrving over other incoming channels
 						for(int j = 1; j < Main.proc_num+1; j++){
 							if((j != agent.to) && (j != agent.from))
-								channel[j][agent.to].turnOnRecord();	
+								Main.channel[j][agent.to].turnOnRecord();	
 						}
 						
 					}	else
 					{
-						channel[agent.from][agent.to].turnOffRecord();
-						
-						
+						Main.channel[agent.from][agent.to].turnOffRecord();
 						System.out.println("printing channel message");
-						while(channel[agent.from][agent.to].messageQueue.peek() != null)
+						while(Main.channel[agent.from][agent.to].messageQueue.peek() != null)
 						{
 							System.out.println("this is channel" + agent.from+ " " + agent.to);
-							RegularMessage rm = (RegularMessage) channel[agent.from][agent.to].messageQueue
+							RegularMessage rm = (RegularMessage) Main.channel[agent.from][agent.to].messageQueue
 									.poll();
 							synchronized (this) {
 								String content = String
@@ -236,8 +233,8 @@ public class Server implements Runnable {
 				else
 				{
 					//if the channel's recording is on, store the message in the channel
-					if(channel[agent.from][agent.to].outputCurrState())
-						channel[agent.from][agent.to].addMessage(agent);
+					if(Main.channel[agent.from][agent.to].outputCurrState())
+						Main.channel[agent.from][agent.to].addMessage(agent);
 					try {
 						os[(int) agent.to].writeObject((RegularMessage) agent);
 						os[(int) agent.to].flush();

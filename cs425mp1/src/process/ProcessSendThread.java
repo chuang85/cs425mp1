@@ -75,8 +75,17 @@ public class ProcessSendThread implements Runnable{
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				
 				Main.snapshot_on = true;
+				
 				Main.p[id].hasRecordedState = true;
+				
+				//turns on recording of messages arrving over other incoming channels
+				for(int j = 1; j < Main.proc_num+1; j++){
+					if(j != id) 
+						Main.channel[j][id].turnOnRecord();	
+				}
+				
 				sendMarker(Main.sequence_num, id);
 			}	else if((Main.snapshot_on == true)&& (id!= 1) &&(Main.p[id].hasRecordedState == true) && (Main.p[id].hasSendMarker == false))
 			{

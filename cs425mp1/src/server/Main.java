@@ -3,6 +3,7 @@ package server;
 import java.io.File;
 import java.util.Scanner;
 
+import process.Channel;
 import process.Process;
 
 public class Main {
@@ -15,6 +16,8 @@ public class Main {
 	public static Process[] p;
 	public static final String txtDirectory = System.getProperty("user.dir")
 			+ "\\snapshot_result\\";
+
+	public static Channel[][] channel;
 
 	public static void main(String args[]) {
 		clearDirectory();
