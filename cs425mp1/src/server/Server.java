@@ -165,7 +165,6 @@ public class Server implements Runnable {
 					{
 						Main.snapshot_num --;
 						Main.sequence_num ++;
-						Main.snapshot_on = false;
 						reset_process();
 						total_marker = Main.proc_num*(Main.proc_num-1);
 						System.out.println("Printing out process states");
@@ -176,16 +175,8 @@ public class Server implements Runnable {
 							System.out.println("widget");
 							System.out.println(Main.p[j].widget);
 						}
-							
-						///
-						///
-						///
-						///
-						/// write the process's state to file. done with one snapshot          to do
-						///
-						///
-						///
-						///
+
+						Main.snapshot_on = false;	
 						if(Main.snapshot_num == 0)
 							System.exit(1);
 					}

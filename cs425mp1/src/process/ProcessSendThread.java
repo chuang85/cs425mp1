@@ -21,6 +21,7 @@ public class ProcessSendThread implements Runnable{
 	}
 	
 	public void sendMessage(int widget, int money, int from, int to) {
+		
 		RegularMessage test_m = new RegularMessage(widget, money, from, to);
 		test_m.testStr = "Greetings from process " + id;
 		try {
@@ -68,6 +69,12 @@ public class ProcessSendThread implements Runnable{
 			
 			if((id == 1) && (Main.snapshot_num > 0) && (ano_rand.nextInt(100)<10) && (Main.snapshot_on == false))
 			{
+				try {
+					Main.p[id].recordProcessState();  // ------------HCK ADDED-----------------
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				Main.snapshot_on = true;
 				Main.p[id].hasRecordedState = true;
 				sendMarker(Main.sequence_num, id);
@@ -78,6 +85,11 @@ public class ProcessSendThread implements Runnable{
 			
 			//send the regular message
 			if ((rand_num + 1) != id) {
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException ie) {
+					// Handle exception
+				}
 				wiget_send = 10 / (id + 1);
 				money_send =  5 / (id + 1);
 				Main.p[id].widget -= wiget_send;

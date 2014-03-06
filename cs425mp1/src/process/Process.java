@@ -83,9 +83,9 @@ public class Process implements Runnable {
 		while (true) {
 			try {
 				my_m = (RegularMessage) client.is.readObject();
-				System.out.println(String.format(
-						"Process %d said: Receive msg from %d, content: %s",
-						id, my_m.getFrom(), my_m.testStr));
+//				System.out.println(String.format(
+//						"Process %d said: Receive msg from %d, content: %s",
+//						id, my_m.getFrom(), my_m.testStr));
 				// System.out.println("money " + my_m.money);
 				money += my_m.money;
 				widget += my_m.widget;
