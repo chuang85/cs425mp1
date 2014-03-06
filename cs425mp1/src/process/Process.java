@@ -21,6 +21,7 @@ public class Process implements Runnable {
 	public int logicalTimestamp;
 	public int[] vectorTimestamp;
 	public boolean hasRecordedState;
+	public boolean hasSendMarker;
 	Client client;
 
 	public Process(int widget, int money) {
@@ -29,6 +30,7 @@ public class Process implements Runnable {
 		logicalTimestamp = 0;
 		vectorTimestamp = new int[Main.proc_num];
 		hasRecordedState = false;
+		hasSendMarker = false;
 	}
 
 	public void recordProcessState() throws IOException {
@@ -89,8 +91,11 @@ public class Process implements Runnable {
 				// "Process %d said: Receive msg from %d, content: %s",
 				// id, my_m.getFrom(), my_m.testStr));
 				// System.out.println("money " + my_m.money);
-				money += my_m.money;
-				widget += my_m.widget;
+				synchronized (this) 
+				{
+					money += my_m.money;
+					widget += my_m.widget;
+				}
 			} catch (IOException e) {
 				System.out.println(e);
 			}

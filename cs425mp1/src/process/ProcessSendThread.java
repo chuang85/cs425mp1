@@ -78,8 +78,9 @@ public class ProcessSendThread implements Runnable{
 				Main.snapshot_on = true;
 				Main.p[id].hasRecordedState = true;
 				sendMarker(Main.sequence_num, id);
-			}	else if((Main.snapshot_on == true)&& (id!= 1) &&(Main.p[id].hasRecordedState == true))
+			}	else if((Main.snapshot_on == true)&& (id!= 1) &&(Main.p[id].hasRecordedState == true) && (Main.p[id].hasSendMarker == false))
 			{
+				Main.p[id].hasSendMarker = true;
 				sendMarker(Main.sequence_num,id);
 			}
 			
@@ -92,9 +93,12 @@ public class ProcessSendThread implements Runnable{
 				}
 				wiget_send = 10 / (id + 1);
 				money_send =  5 / (id + 1);
-				Main.p[id].widget -= wiget_send;
-				Main.p[id].money -= money_send;
-				sendMessage(wiget_send, money_send, id, rand_num + 1);
+				synchronized (this) 
+				{
+					Main.p[id].widget -= wiget_send;
+					Main.p[id].money -= money_send;
+					sendMessage(wiget_send, money_send, id, rand_num + 1);
+				}
 			}
 		}
 	}

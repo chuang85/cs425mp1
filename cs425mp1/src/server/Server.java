@@ -1,5 +1,8 @@
 package server;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -26,7 +29,29 @@ public class Server implements Runnable {
 	public void reset_process()
 	{
 		for(int j = 1; j < Main.proc_num+1; j ++)
+		{
 			Main.p[j].hasRecordedState = false;
+			Main.p[j].hasSendMarker = false;
+		}
+	}
+	
+	public void resetChannel()
+	{
+		for(int j = 1; j < Main.proc_num+1; j ++)
+		{
+			for(int k = 1; k < Main.proc_num+1; k++)
+			{
+				if(j != k)
+				{
+					
+					while(channel[j][k].messageQueue.poll() != null)
+					{
+						
+					}
+					channel[j][k].turnOffRecord();
+				}
+			}
+		}
 	}
 	
 	@Override
@@ -91,6 +116,8 @@ public class Server implements Runnable {
 			}
 		}
 		
+		
+		
 		total_marker = Main.proc_num*(Main.proc_num-1);
 		// listen on clients
 		Message agent;
@@ -138,11 +165,43 @@ public class Server implements Runnable {
 					}	else
 					{
 						channel[agent.from][agent.to].turnOffRecord();
+						
+						
 						System.out.println("printing channel message");
 						while(channel[agent.from][agent.to].messageQueue.peek() != null)
 						{
-							System.out.println(((RegularMessage)channel[agent.from][agent.to].messageQueue.poll()).from);
+							System.out.println("this is channel" + agent.from+ " " + agent.to);
+							RegularMessage rm = (RegularMessage) channel[agent.from][agent.to].messageQueue
+									.poll();
+							synchronized (this) {
+								String content = String
+										.format("id %d : snapshot %d : message %d to %d : money %d widgets %d",
+												agent.to, Main.sequence_num,
+												agent.from, agent.to, rm.money,
+												rm.widget); // TODO ADD
+															// TIMESTAMP
+
+								String filePath = Main.txtDirectory
+										+ "channel_" + agent.from + agent.to
+										+ ".txt";
+								File file = new File(filePath);
+								try {
+									if (!file.exists()) {
+										file.createNewFile();
+									}
+									FileWriter fw = new FileWriter(
+											file.getAbsoluteFile(), true);
+									BufferedWriter bw = new BufferedWriter(fw);
+									bw.write(content);
+									bw.newLine();
+									bw.close();
+								} catch (IOException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+							}
 						}
+						
 						///
 						///
 						///           record the channel message            to do 
@@ -166,16 +225,8 @@ public class Server implements Runnable {
 						Main.snapshot_num --;
 						Main.sequence_num ++;
 						reset_process();
+						resetChannel();
 						total_marker = Main.proc_num*(Main.proc_num-1);
-						System.out.println("Printing out process states");
-						for( int j = 1; j < Main.proc_num+1; j++)
-						{
-							System.out.println("money:");
-							System.out.println(Main.p[j].money);
-							System.out.println("widget");
-							System.out.println(Main.p[j].widget);
-						}
-
 						Main.snapshot_on = false;	
 						if(Main.snapshot_num == 0)
 							System.exit(1);
@@ -190,7 +241,7 @@ public class Server implements Runnable {
 					try {
 						os[(int) agent.to].writeObject((RegularMessage) agent);
 						os[(int) agent.to].flush();
-						System.out.println(String.format("Sending msg from %d to %d", agent.from, agent.to));
+//						System.out.println(String.format("Sending msg from %d to %d", agent.from, agent.to));
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
