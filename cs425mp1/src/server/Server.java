@@ -197,6 +197,7 @@ public class Server implements Runnable {
 					total_marker--;
 					// done with one snapshot
 					if (total_marker == 0) {
+						System.out.println("This snapshot is done");
 						Main.snapshot_num--;
 						Main.sequence_num++;
 						reset_process();
