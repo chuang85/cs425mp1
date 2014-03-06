@@ -1,1 +1,4 @@
 id 3 : snapshot 1 : money 8 widgets 7
+id 3 : snapshot 2 : money 25 widgets 67
+id 3 : snapshot 3 : money 37 widgets 103
+id 3 : snapshot 4 : money 42 widgets 120
