@@ -32,23 +32,25 @@ public class Process implements Runnable {
 	}
 
 	public void recordProcessState() throws IOException {
-		String content = String.format(
-				"id %d : snapshot : %d : money %d widgets %d", id,
-				Main.sequence_num, money, widget); // TODO ADD TIMESTAMP
+		synchronized (this) {
+			String content = String.format(
+					"id %d : snapshot %d : money %d widgets %d", id,
+					Main.sequence_num, money, widget); // TODO ADD TIMESTAMP
 
-		String filePath = Main.txtDirectory + "process_" + id + ".txt";
-		File file = new File(filePath);
+			String filePath = Main.txtDirectory + "process_" + id + ".txt";
+			File file = new File(filePath);
 
-		// if file doesnt exists, then create it
-		if (!file.exists()) {
-			file.createNewFile();
+			// if file doesnt exists, then create it
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+			// true means append to existing file
+			FileWriter fw = new FileWriter(file.getAbsoluteFile(), true);
+			BufferedWriter bw = new BufferedWriter(fw);
+			bw.write(content);
+			bw.newLine();
+			bw.close();
 		}
-		// true means append to existing file
-		FileWriter fw = new FileWriter(file.getAbsoluteFile(), true);
-		BufferedWriter bw = new BufferedWriter(fw);
-		bw.write(content);
-		bw.newLine();
-		bw.close();
 	}
 
 	public void onReceivingMarker(Message m, Channel c) throws IOException {
@@ -83,9 +85,9 @@ public class Process implements Runnable {
 		while (true) {
 			try {
 				my_m = (RegularMessage) client.is.readObject();
-//				System.out.println(String.format(
-//						"Process %d said: Receive msg from %d, content: %s",
-//						id, my_m.getFrom(), my_m.testStr));
+				// System.out.println(String.format(
+				// "Process %d said: Receive msg from %d, content: %s",
+				// id, my_m.getFrom(), my_m.testStr));
 				// System.out.println("money " + my_m.money);
 				money += my_m.money;
 				widget += my_m.widget;

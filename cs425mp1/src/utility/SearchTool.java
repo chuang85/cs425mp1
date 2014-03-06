@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.Scanner;
 import java.util.Set;
 
 import server.Main;
@@ -12,7 +13,6 @@ import server.Main;
 public class SearchTool {
 	final File folder;
 	Set<String> fileSet;
-	
 
 	public SearchTool(String folderPath) {
 		folder = new File(folderPath);
@@ -26,7 +26,7 @@ public class SearchTool {
 		BufferedReader br = null;
 		for (String currFile : fileSet) {
 			fullPath = Main.txtDirectory + currFile;
-			//System.out.println(fullPath);
+			// System.out.println(fullPath);
 			br = new BufferedReader(new FileReader(fullPath));
 			while ((currLine = br.readLine()) != null) {
 				if (currLine.contains(query))
@@ -41,15 +41,23 @@ public class SearchTool {
 			if (fileEntry.isDirectory()) {
 				listFilesForFolder();
 			} else {
-				//System.out.println(fileEntry.getName());
+				// System.out.println(fileEntry.getName());
 				fileSet.add(fileEntry.getName());
 			}
 		}
 	}
-	
+
 	public static void main(String[] args) throws IOException {
 		SearchTool st = new SearchTool(Main.txtDirectory);
 		st.listFilesForFolder();
-		st.searchAll(1);
+		while (true) {
+			System.out.println("\nEnter the snapshot id, enter '0' to quit ");
+			Scanner scanner = new Scanner(System.in);
+			int snapshotId = scanner.nextInt();
+			if (snapshotId == 0) {
+				break;
+			}
+			st.searchAll(snapshotId);
+		}
 	}
 }

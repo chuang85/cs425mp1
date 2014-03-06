@@ -14,7 +14,7 @@ public class Main {
 	public static int sequence_num = 1;
 	public static Process[] p;
 	public static final String txtDirectory = System.getProperty("user.dir")
-			+ "/snapshot_result/";
+			+ "\\snapshot_result\\";
 
 	public static void main(String args[]) {
 		clearDirectory();
