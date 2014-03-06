@@ -42,6 +42,7 @@ public class ProcessSendThread implements Runnable{
 				Marker m = new Marker(sequenceNum, from, i);
 				try {
 					os.writeObject((Message) m);
+					System.out.println(String.format("P%d is sending marker to P%d", id, i));
 					os.flush();
 				} catch (IOException e) {
 					System.out.println(e);

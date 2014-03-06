@@ -43,7 +43,7 @@ public class Main {
 		p = new Process[proc_num + 1];
 		for (int i = 1; i < proc_num + 1; i++) {
 			// give each process 100 money and 100 wigets to start
-			p[i] = new Process(100, 100);
+			p[i] = new Process(10, 10);
 		}
 		new Thread(server).start();
 

@@ -1,1 +1,1 @@
-id 1 : snapshot 1 : money 98 widgets 95
+id 1 : snapshot 1 : money 8 widgets 5
