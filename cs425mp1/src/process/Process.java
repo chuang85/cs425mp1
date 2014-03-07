@@ -91,6 +91,19 @@ public class Process implements Runnable {
 				// "Process %d said: Receive msg from %d, content: %s",
 				// id, my_m.getFrom(), my_m.testStr));
 				// System.out.println("money " + my_m.money);
+				
+				//update timestamp
+				Main.lambo[my_m.to] = Math.max(my_m.lamboM+1,Main.lambo[my_m.to]+1);
+				for(int j = 1; j < Main.proc_num+1; j ++)
+				{
+					if(j != my_m.to)
+					{
+						Main.vector[my_m.to][j] = Math.max(my_m.vectorM[j], Main.vector[my_m.to][j]);
+					}	else
+					{
+						Main.vector[my_m.to][j] ++;
+					}
+				}
 				synchronized (this) 
 				{
 					money += my_m.money;

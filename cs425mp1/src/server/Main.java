@@ -18,7 +18,10 @@ public class Main {
 			+ "\\snapshot_result\\";
 
 	public static Channel[][] channel;
-
+	
+	public static int[] lambo;
+	public static int[][] vector;
+	
 	public static void main(String args[]) {
 		clearDirectory();
 
@@ -38,7 +41,10 @@ public class Main {
 		System.out.println("Enter the snapshot number : ");
 		snapshot_num = scanner.nextInt();
 		// snapshot_num = snapshot_num;
-
+		
+		lambo = new int[proc_num+1];
+		vector = new int[proc_num+1][proc_num+1];
+		
 		// the process array, starting from index 1 !!!!!!!!!!!!!!!!!!!!!!
 		p = new Process[proc_num + 1];
 		for (int i = 1; i < proc_num + 1; i++) {
